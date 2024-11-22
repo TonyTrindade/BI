@@ -18,17 +18,17 @@ else:
 now = datetime.now()
 dataConsulta = now.strftime("%Y-%m-%d") #("%d/%m/%Y")
 
-base_url = 'http://localhost:2004' #'https://api.toqweb.com.br:2004'
+base_url = 'http://localhost:2004/rel/maxus/kpi/' #'https://api.toqweb.com.br:2004'
 
 #url_BiTitulos = 'http://localhost:2004/rel/maxus/kpi/TitulosPagos'
 
 
 urls = [
-    '/rel/maxus/vendas/VendasBiEmpresa',
-    '/rel/maxus/kpi/VendasBiOPV',
-    '/rel/maxus/vendas/BalanceteBiMes',
-    '/rel/maxus/vendas/VendasBiProduto',
-    '/rel/maxus/vendas/TitulosPagos'
+    'VendasBiEmpresa',
+    'VendasBiOPV',
+    'BalanceteBiMes',
+    'VendasBiProduto',
+    'TitulosPagos'
 ]
 
 for url_final in urls:
