@@ -8,19 +8,25 @@ from PegarToken import pegartoken
 from env_utils import set_env_variable
 from datetime import datetime
 from dotenv import load_dotenv
+from datetime import datetime, timedelta
 load_dotenv()
 
+now = datetime.now()
 if os.getenv("DATACONSULTA") != '':
     DataAlt = os.getenv("DATACONSULTA")
 else:
-    print('Data de alteração inválida, preencha o campo para consulta')
+    DaltaAlt = now.strftime("%Y-%m-%d")
 
-now = datetime.now()
-dataConsulta = now.strftime("%Y-%m-%d") #("%d/%m/%Y")
+#pega data do arquivo .env e e subtrai 30 dias padrão para usar na dataini
+dataConsultaAnt = DataAlt
+ToDate = datetime.strptime(dataConsultaAnt, "%Y-%m-%d")
+dataconsultaAntIni = ToDate - timedelta(days=30)
+dataconsultaAntIniStr = dataconsultaAntIni.strftime("%Y-%m-%d") 
 
-base_url = 'http://localhost:2004/rel/maxus/kpi/' #'https://api.toqweb.com.br:2004'
+#pega data atual para gravar no arquivo .env quando concluir a consulta
+dataconsulta = now.strftime("%Y-%m-%d")
 
-#url_BiTitulos = 'http://localhost:2004/rel/maxus/kpi/TitulosPagos'
+base_url = 'https://apix.toqweb.com.br:2004/rel/maxus/kpi/'
 
 
 urls = [
@@ -42,11 +48,14 @@ for url_final in urls:
             'xformat' : 'csv'
         }
 
+    #todos os endpoints usados na consulta estão usando a mesma classeDTO para não dar erro e poder passar todos os campos previamente no body
     body = {
-            # 'TipoConsulta': '', 
-            # 'DataAlt': DataAlt,
-            'DataIni': '2024-11-01',
-            'DataFim' : DataAlt
+            'TipoConsulta' : '', 
+            'Ordem' : '',
+            'Detalhado' : False,
+            'DataAlt' : dataConsultaAnt,
+            'DataIni' : dataconsultaAntIniStr,
+            'DataFim' : dataConsultaAnt,
         }
 
     api_response = requests.post(url, json=body, headers=headers)
@@ -54,6 +63,7 @@ for url_final in urls:
     if api_response.status_code == 200:
             
             print("Solicitação bem-sucedida!")
+            set_env_variable('DATACONSULTA', dataconsulta)
 
             file = url_final +".csv"
         
@@ -69,7 +79,7 @@ for url_final in urls:
                 print(df.head())  
                 
                 df.to_csv(file, sep=';', decimal=',', index=False, encoding='utf-8-sig')
-                print("Dados salvos em 'dados_excel.csv' no formato adequado para Excel!")
+                print(f"Dados salvos em {file} no formato adequado para Excel!")
         
             except Exception as e:
                 print(f"Erro ao processar os dados CSV: {e}")
@@ -78,3 +88,5 @@ for url_final in urls:
     else:
         print(f"Falha ao acessar a API: {api_response.status_code}")
         print("Resposta:", api_response.text)
+
+print('Consulta Finalizada!')
