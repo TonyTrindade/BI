@@ -48,23 +48,23 @@ for url_final in urls:
 
     if url_final == 'Vendas':
         tipoConsulta = [
-            '-',
-            'vendedor',
-            'pessoaempresa',
-            'condpagamento',
-            'meiopagamento',
-            'caixapdv'
+            'Cabecalho',
+            'Vendedor',
+            'Itens',
+            'Condpagamento',
+            'Pagamentos',
+            'Caixapdv'
         ]
 
     if url_final == 'Produto':
         tipoConsulta = [
-            'produtoempresa',
-            'secao',
-            'grupo',
-            'categoria',
-            'subcategoria',
-            'setor',
-            'impostoicms'
+            'Empresa',
+            'Secao',
+            'Grupo',
+            'Categoria',
+            'Subcategoria',
+            'Setor',
+            'Impostoicms'
         ]
 
     if url_final == 'Vendas' or url_final == 'Produto':
