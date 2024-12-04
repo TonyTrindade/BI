@@ -30,7 +30,7 @@ base_url = 'https://apix.toqweb.com.br:2004/rel/maxus/kpi/'
 
 
 urls = [
-    'VendasEmpresa',
+    'DadosEmpresa',
     'Vendas',
     'BalanceteBiMes',
     'Produto',
